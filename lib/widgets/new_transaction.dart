@@ -4,6 +4,9 @@
 
 we used the stateful widget as per we have to make the changes in the app in it*/
 
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -27,6 +30,7 @@ class _NewTransactionState extends State<NewTransaction> {
   final _amountController = TextEditingController();
   // this is for making the entry private that the entry can be done but can't be edited ones it is there
 
+  DateTime date = DateTime(2016, 10, 26);
   DateTime? _selectDate;
   // as per it was giving us the error of the not defining the null date time as per we have to do it to make the constraint to look like null or not null
 
@@ -64,24 +68,63 @@ class _NewTransactionState extends State<NewTransaction> {
   }
 
   void _showDatePick() {
-    showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2023, 4, 1),
-      lastDate: DateTime.now(),
-    ).then(
-      (pickDate) {
-        if (pickDate == null) {
-          return;
-        } else {
-          setState(
-            () {
-              _selectDate = pickDate;
+    Platform.isIOS
+        ? showCupertinoModalPopup(
+            context: context,
+            builder: (context) {
+              return Container(
+                height: MediaQuery.of(context).size.height * 0.4,
+                padding:  const EdgeInsets.all(2),
+                color: Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                        child: CupertinoDatePicker(
+                      initialDateTime: DateTime.now(),
+                      mode: CupertinoDatePickerMode.date,
+                      minimumDate: DateTime(2000),
+                      maximumDate: DateTime.now().add(
+                        const Duration(
+                          days: 2 * 365,
+                        ),
+                      ),
+                      onDateTimeChanged: (DateTime pickDate) {
+                        setState(() {
+                          _selectDate = pickDate;
+                          pickDate = date;
+                        });
+                      },
+                    )),
+                    CupertinoButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text("Done"),
+                    ),
+                  ],
+                ),
+              );
+            },
+          )
+        : showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2023, 4, 1),
+            lastDate: DateTime.now(),
+          ).then(
+            (pickDate) {
+              if (pickDate == null) {
+                return;
+              } else {
+                setState(
+                  () {
+                    _selectDate = pickDate;
+                  },
+                );
+              }
             },
           );
-        }
-      },
-    );
     // as per then is used here as per to make the app to select the date and to show us but this docent mean that the app will stop working the app will work until the date is received and after getting it it will continue from  there
   }
 
@@ -145,36 +188,60 @@ class _NewTransactionState extends State<NewTransaction> {
                           // as per we have to make the selectDate with the date_time.now as to make the constraint to make the date time appear in the app as per making the app as per when selected it will make it appear other than making it null
                           ),
                     ),
-                    TextButton(
-                      onPressed: _showDatePick,
-                      child: Text(
-                        'Chosen Date',
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
+                    Platform.isIOS
+                        ? CupertinoButton(
+                            onPressed: _showDatePick,
+                            child: Text(
+                              'Choose Date',
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          )
+                        : TextButton(
+                            onPressed: _showDatePick,
+                            child: Text(
+                              'Choose Date',
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
                   ],
                 ),
               ),
               // creating the button in the bottom as the enter
               Padding(
                 padding: const EdgeInsets.all(2),
-                child: ElevatedButton(
-                  onPressed: _addData,
-
-                  child: const Text(
-                    'Add Transaction',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                      //color: Theme.of(context).textTheme.button,
-                      color: Color.fromARGB(255, 99, 32, 150),
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+                child: Platform.isIOS
+                    ? CupertinoButton(
+                        onPressed: _addData,
+                        child: const Text(
+                          'Add Transaction',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                            //color: Theme.of(context).textTheme.button,
+                            color: Color.fromARGB(255, 99, 32, 150),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                    : ElevatedButton(
+                        onPressed: _addData,
+                        child: const Text(
+                          'Add Transaction',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                            //color: Theme.of(context).textTheme.button,
+                            color: Color.fromARGB(255, 99, 32, 150),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
               ),
             ],
           ),
@@ -183,3 +250,6 @@ class _NewTransactionState extends State<NewTransaction> {
     );
   }
 }
+
+
+// 20
