@@ -6,7 +6,7 @@ we used the stateful widget as per we have to make the changes in the app in it*
 
 import 'dart:io';
 
-import '../adaptive/adaptiveButtons.dart';
+import './adaptive_Buttons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
