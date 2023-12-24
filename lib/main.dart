@@ -47,7 +47,10 @@ class MyApp extends StatelessWidget {
               //button: const TextStyle(color: Color.fromARGB(255, 99, 32, 150),),
             ), // as per this will make the all the input to make in same font as the other will
         appBarTheme: const AppBarTheme(
-          titleTextStyle: TextStyle(fontFamily: 'Quicksand', fontSize: 20),
+          titleTextStyle: TextStyle(
+            fontFamily: 'Quicksand',
+            fontSize: 20,
+          ),
         ),
       ),
       home: const MyHomePage(),

@@ -22,17 +22,12 @@ class TransactionList extends StatelessWidget {
           ? LayoutBuilder(builder: (context, constraints) {
               return Column(
                 children: <Widget>[
-                  const Text(
+                  Text(
                     'No Transaction Present!',
-                    style: TextStyle(
-                      fontFamily: 'OpenSans',
-                      fontSize: 20,
-                      color: Color.fromARGB(255, 99, 32, 150),
-                      // this is done as per to make the app that whatever kind of input is there in the terminal accept it and gave it the font that is given to the rest in the main dart
-                    ),
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 20,
                     // the size box is the same as that of the container but the main difference between the box and the container that the container need a child as well the box can manage to not to have it
                   ),
                   Container(

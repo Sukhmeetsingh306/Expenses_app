@@ -6,6 +6,7 @@ we used the stateful widget as per we have to make the changes in the app in it*
 
 import 'dart:io';
 
+import 'package:expenses_app/widgets/adaptiveButtons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -74,11 +75,17 @@ class _NewTransactionState extends State<NewTransaction> {
             builder: (context) {
               return Container(
                 height: MediaQuery.of(context).size.height * 0.4,
-                padding:  const EdgeInsets.all(2),
+                padding: const EdgeInsets.all(2),
                 color: Colors.white,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
+                    CupertinoButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text("Done"),
+                    ),
                     Expanded(
                         child: CupertinoDatePicker(
                       initialDateTime: DateTime.now(),
@@ -96,12 +103,6 @@ class _NewTransactionState extends State<NewTransaction> {
                         });
                       },
                     )),
-                    CupertinoButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text("Done"),
-                    ),
                   ],
                 ),
               );
@@ -188,27 +189,7 @@ class _NewTransactionState extends State<NewTransaction> {
                           // as per we have to make the selectDate with the date_time.now as to make the constraint to make the date time appear in the app as per making the app as per when selected it will make it appear other than making it null
                           ),
                     ),
-                    Platform.isIOS
-                        ? CupertinoButton(
-                            onPressed: _showDatePick,
-                            child: Text(
-                              'Choose Date',
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          )
-                        : TextButton(
-                            onPressed: _showDatePick,
-                            child: Text(
-                              'Choose Date',
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
+                    AdaptiveButtons("Choose Date", () => _showDatePick())
                   ],
                 ),
               ),
