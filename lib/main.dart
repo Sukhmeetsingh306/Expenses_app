@@ -1,5 +1,9 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'dart:io';
 
+// import 'package:expenses_app/adaptive/adaptive_appBar.dart';
+import 'package:expenses_app/adaptive/adaptive_material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -26,35 +30,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Personal Expenses',
-      color: Colors.purple,
-      theme: ThemeData(
-        // primarySwatch:  Color.fromRGBO(103, 58, 183, 1),
-        //errorColor: const Color.fromARGB(255, 152, 57, 50),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromRGBO(103, 58, 183, 1),
-        ),
-        useMaterial3: true,
-        fontFamily:
-            'Quicksand', // as to make this happen we had to add the font file in the pub yaml file and then and only we can add the font over here
-        textTheme: ThemeData.light().textTheme.copyWith(
-              titleMedium: const TextStyle(
-                fontFamily: 'OpenSans',
-                fontSize: 18,
-                color: Color.fromARGB(255, 99, 32, 150),
-              ),
-              //button: const TextStyle(color: Color.fromARGB(255, 99, 32, 150),),
-            ), // as per this will make the all the input to make in same font as the other will
-        appBarTheme: const AppBarTheme(
-          titleTextStyle: TextStyle(
-            fontFamily: 'Quicksand',
-            fontSize: 20,
-          ),
-        ),
-      ),
-      home: const MyHomePage(),
-    );
+    return const AdaptiveMaterial('Personal Expenses');
   }
 }
 
@@ -196,14 +172,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-
-    final bool isLandscape;
-    isLandscape = mediaQuery.orientation == Orientation.landscape;
-
-    final dynamic appBar = Platform.isIOS
+  Widget _buildAppBar() {
+    return Platform.isIOS
         ? CupertinoNavigationBar(
             middle: const Text(
               'Personal Expenses',
@@ -255,6 +225,16 @@ class _MyHomePageState extends State<MyHomePage> {
               )
             ],
           );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+
+    final bool isLandscape;
+    isLandscape = mediaQuery.orientation == Orientation.landscape;
+
+    final dynamic appBar = _buildAppBar();
 
     final txListTransaction = SizedBox(
       height: (mediaQuery.size.height -
@@ -267,6 +247,54 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
 
+    List<Widget> _buildInLandscape() {
+      return [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Show Chart',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            Switch.adaptive(
+              activeColor: const Color.fromARGB(255, 99, 32, 150),
+              value: _showChart,
+              onChanged: (val) {
+                setState(
+                  () {
+                    _showChart = val;
+                  },
+                );
+              },
+            )
+          ],
+        ),
+        _showChart
+            ? SizedBox(
+                height: (mediaQuery.size.height -
+                        appBar.preferredSize.height -
+                        mediaQuery.padding.top) *
+                    0.7,
+                child: Chart(_recentTransaction),
+              )
+            : txListTransaction,
+      ];
+    }
+
+    List<Widget> _buildNotInLandscape() {
+      return [
+        SizedBox(
+          height: (mediaQuery.size.height -
+                  appBar.preferredSize.height -
+                  mediaQuery.padding.top) *
+              0.3,
+          child: Chart(_recentTransaction),
+        ),
+        txListTransaction,
+      ];
+    }
+
     final pageBody = SafeArea(
       child: SingleChildScrollView(
         child: Column(
@@ -274,48 +302,9 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // isLandscape ? Row(
-            if (isLandscape)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'Show Chart',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  Switch.adaptive(
-                    activeColor: const Color.fromARGB(255, 99, 32, 150),
-                    value: _showChart,
-                    onChanged: (val) {
-                      setState(
-                        () {
-                          _showChart = val;
-                        },
-                      );
-                    },
-                  )
-                ],
-              ),
+            if (isLandscape) ..._buildInLandscape(),
 
-            if (!isLandscape)
-              SizedBox(
-                height: (mediaQuery.size.height -
-                        appBar.preferredSize.height -
-                        mediaQuery.padding.top) *
-                    0.3,
-                child: Chart(_recentTransaction),
-              ),
-            if (!isLandscape) txListTransaction,
-            if (isLandscape)
-              _showChart
-                  ? SizedBox(
-                      height: (mediaQuery.size.height -
-                              appBar.preferredSize.height -
-                              mediaQuery.padding.top) *
-                          0.7,
-                      child: Chart(_recentTransaction),
-                    )
-                  : txListTransaction,
+            if (!isLandscape) ..._buildNotInLandscape(),
           ],
         ),
       ),
@@ -346,4 +335,4 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-// video 19 chapter 5
+//16

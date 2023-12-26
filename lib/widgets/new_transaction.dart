@@ -6,6 +6,8 @@ we used the stateful widget as per we have to make the changes in the app in it*
 
 import 'dart:io';
 
+import 'package:expenses_app/adaptive/adaptive_add_transaction.dart';
+
 import '../adaptive/adaptive_buttons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -80,12 +82,12 @@ class _NewTransactionState extends State<NewTransaction> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    CupertinoButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text("Done"),
-                    ),
+                    // CupertinoButton(
+                    //   onPressed: () {
+                    //     Navigator.pop(context);
+                    //   },
+                    //   child: const Text("Done"),
+                    // ),
                     Expanded(
                         child: CupertinoDatePicker(
                       initialDateTime: DateTime.now(),
@@ -193,37 +195,7 @@ class _NewTransactionState extends State<NewTransaction> {
                   ],
                 ),
               ),
-              // creating the button in the bottom as the enter
-              Padding(
-                padding: const EdgeInsets.all(2),
-                child: Platform.isIOS
-                    ? CupertinoButton(
-                        onPressed: _addData,
-                        child: const Text(
-                          'Add Transaction',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                            //color: Theme.of(context).textTheme.button,
-                            color: Color.fromARGB(255, 99, 32, 150),
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      )
-                    : ElevatedButton(
-                        onPressed: _addData,
-                        child: const Text(
-                          'Add Transaction',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                            //color: Theme.of(context).textTheme.button,
-                            color: Color.fromARGB(255, 99, 32, 150),
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-              ),
+              AdaptiveAddTransaction('Add Transaction', () => _addData())
             ],
           ),
         ),
