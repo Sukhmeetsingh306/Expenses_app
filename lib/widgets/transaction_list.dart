@@ -37,7 +37,3 @@ class TransactionList extends StatelessWidget {
     );
   }
 }
-
-
-
-// video 34

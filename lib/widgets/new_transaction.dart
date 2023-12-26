@@ -203,6 +203,3 @@ class _NewTransactionState extends State<NewTransaction> {
     );
   }
 }
-
-
-// 20
