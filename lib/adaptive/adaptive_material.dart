@@ -1,4 +1,5 @@
-import '../main.dart';
+import 'package:expenses_app/widgets/sac_main.dart';
+
 import 'package:flutter/material.dart';
 
 class AdaptiveMaterial extends StatelessWidget {
@@ -35,7 +36,7 @@ class AdaptiveMaterial extends StatelessWidget {
           ),
         ),
       ),
-      home: const MyHomePage(),
+      home: const ExpensesMain(),
     );
   }
 }
